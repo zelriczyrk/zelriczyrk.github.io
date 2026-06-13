@@ -14,3 +14,23 @@
     <a href="/claimgiveaway" class="btn">GO TO CLAIM GIVEAWAY</a>
 </body>
 </html>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+    // REPLACE WITH YOUR ACTUAL API KEY
+    const firebaseConfig = {
+        apiKey: "AIzaSyAmMlXi0lbYiMEobM5fueVTXNU_AhzdVbk",
+        authDomain: "hiiii-14319.firebaseapp.com",
+        projectId: "hiiii-14319"
+    };
+
+    const auth = getAuth(initializeApp(firebaseConfig));
+
+    onAuthStateChanged(auth, (user) => {
+        // If the user is not logged in, redirect to the login page
+        if (!user) {
+            window.location.href = "https://zelriczyrk.github.io/login/";
+        }
+    });
+</script>
