@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Please login to continue</h1>
+    <button id="login-btn">Login with Discord</button>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getAuth, signInWithPopup, OAuthProvider } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+        // REPLACE WITH YOUR ACTUAL API KEY
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmMlXi0lbYiMEobM5fueVTXNU_AhzdVbk",
+            authDomain: "hiiii-14319.firebaseapp.com",
+            projectId: "hiiii-14319"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.getElementById("login-btn").onclick = () => {
+            const provider = new OAuthProvider('oidc.discord');
+            signInWithPopup(auth, provider)
+                .then(() => {
+                    window.location.href = "https://zelriczyrk.github.io/";
+                })
+                .catch((error) => {
+                    alert("Login failed: " + error.message);
+                });
+        };
+    </script>
+</body>
+</html>
