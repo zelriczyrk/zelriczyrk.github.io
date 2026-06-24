@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NinjaRobux - Home</title>
+    <title>NinjaRobux - Login</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         body {
@@ -18,27 +18,39 @@
         .blur-neon-text-pink {
             text-shadow: 0 0 10px rgba(255, 0, 127, 0.6), 0 0 20px rgba(255, 0, 127, 0.3);
         }
-        .blur-neon-btn-cyan {
+        .blur-neon-card {
+            background: rgba(6, 4, 12, 0.65);
             border: 2px solid #00ffff;
-            color: #00ffff;
-            background: rgba(0, 255, 255, 0.02);
-            text-shadow: 0 0 4px rgba(0, 255, 255, 0.5);
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.1), inset 0 0 10px rgba(0, 255, 255, 0.05);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2), inset 0 0 15px rgba(0, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+        }
+        .blur-neon-btn-discord {
+            border: 2px solid #5865F2;
+            color: #5865F2;
+            background: rgba(88, 101, 242, 0.03);
+            text-shadow: 0 0 4px rgba(88, 101, 242, 0.4);
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.15);
             backdrop-filter: blur(12px);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .blur-neon-btn-cyan:hover {
-            background: #00ffff;
-            color: #030308;
-            box-shadow: 0 0 25px #00ffff, 0 0 45px rgba(0, 255, 255, 0.5);
+        .blur-neon-btn-discord:hover {
+            background: #5865F2;
+            color: #ffffff;
+            box-shadow: 0 0 25px #5865F2, 0 0 45px rgba(88, 101, 242, 0.5);
             text-shadow: none;
+        }
+        .blur-neon-popup {
+            background: rgba(6, 4, 12, 0.8);
+            border: 2px solid #ff007f;
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.35), inset 0 0 20px rgba(255, 0, 127, 0.15);
+            backdrop-filter: blur(24px);
         }
         .blur-neon-btn-pink {
             border: 2px solid #ff007f;
             color: #ff007f;
             background: rgba(255, 0, 127, 0.02);
             text-shadow: 0 0 4px rgba(255, 0, 127, 0.5);
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.1), inset 0 0 10px rgba(255, 0, 127, 0.05);
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.1);
             backdrop-filter: blur(12px);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -48,87 +60,87 @@
             box-shadow: 0 0 25px #ff007f, 0 0 45px rgba(255, 0, 127, 0.5);
             text-shadow: none;
         }
-        .blur-neon-popup {
-            background: rgba(6, 4, 12, 0.75);
-            border: 2px solid #ff007f;
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.35), inset 0 0 20px rgba(255, 0, 127, 0.15);
-            backdrop-filter: blur(24px);
-        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+<body class="min-h-screen flex items-center justify-center p-6 overflow-x-hidden">
 
-    <header class="border-b border-purple-950/20 px-6 py-4 backdrop-blur-sm sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl md:text-2xl font-bold tracking-widest text-cyan-400 blur-neon-text-cyan">NINJAROBUX</h1>
-            <nav class="flex items-center gap-4">
-                <div id="userProfile" class="hidden flex items-center gap-2 bg-slate-950/50 border border-purple-500/20 px-3 py-1 rounded-full backdrop-blur-sm">
-                    <img id="userAvatar" src="" alt="Avatar" class="w-6 h-6 rounded-full border border-cyan-400">
-                    <span id="userTag" class="text-xs md:text-sm font-medium text-cyan-400"></span>
-                </div>
-                <a href="/login/" class="blur-neon-btn-cyan px-4 py-1.5 rounded-xl text-sm font-medium tracking-wide">Login</a>
-                <a href="/giveawayclaim/" class="blur-neon-btn-pink px-4 py-1.5 rounded-xl text-sm font-medium tracking-wide">Giveaway</a>
-            </nav>
+    <div class="blur-neon-card p-6 md:p-8 rounded-2xl w-full max-w-sm mx-auto text-center">
+        <div class="mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-cyan-400 blur-neon-text-cyan tracking-widest uppercase">LOGIN</h2>
+            <p class="text-gray-500 text-[10px] uppercase tracking-widest mt-2">Authorized Personnel Only</p>
         </div>
-    </header>
 
-    <main class="max-w-4xl mx-auto text-center px-6 py-12 flex-grow flex flex-col justify-center items-center w-full">
-        <div class="space-y-6 max-w-2xl">
-            <h2 class="text-4xl md:text-6xl font-extrabold tracking-widest text-pink-500 blur-neon-text-pink leading-tight">
-                WELCOME TO NINJAROBUX
-            </h2>
-            <p class="text-gray-400 text-sm md:text-base tracking-wider max-w-lg mx-auto leading-relaxed">
-                Experience the futuristic neon atmosphere. Join our system and explore premium exclusive features.
-            </p>
-            <div class="pt-4 flex flex-col sm:flex-row justify-center items-center gap-4 w-full max-w-md mx-auto">
-                <button onclick="showPopup()" class="w-full sm:w-auto blur-neon-btn-pink px-8 py-3 rounded-xl text-sm font-bold tracking-widest uppercase">
-                    EXPLORE NOW
-                </button>
-                <a href="/login/" class="w-full sm:w-auto text-center blur-neon-btn-cyan px-8 py-3 rounded-xl text-sm font-bold tracking-widest uppercase">
-                    ENTER DASHBOARD
-                </a>
-            </div>
+        <div class="py-2">
+            <button id="discordLoginBtn" class="w-full blur-neon-btn-discord font-bold py-3 rounded-xl text-xs md:text-sm uppercase tracking-widest flex items-center justify-center gap-3 cursor-pointer">
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 127.14 96.36">
+                    <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c.9-.65,1.76-1.34,2.58-2a75.58,75.58,0,0,0,73,0c.83.69,1.69,1.38,2.58,2a68.21,68.21,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31.06-18.83C129.87,50.24,123.77,27.42,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/>
+                </svg>
+                Sign In With Discord
+            </button>
         </div>
-    </main>
 
-    <div id="welcomePopup" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="mt-6 border-t border-purple-950/30 pt-4">
+            <a href="/" class="text-[11px] text-gray-500 hover:text-cyan-400 tracking-widest transition uppercase font-medium">BACK TO HOME</a>
+        </div>
+    </div>
+
+    <div id="errorPopup" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center z-50 p-4">
         <div class="blur-neon-popup p-6 md:p-8 rounded-2xl max-w-sm w-full text-center">
-            <h3 class="text-xl md:text-2xl font-bold text-pink-500 blur-neon-text-pink mb-3 tracking-widest">NOTIFICATION</h3>
-            <p class="text-gray-300 text-sm mb-6 tracking-wide leading-relaxed">Welcome to the futuristic network. Access granted successfully.</p>
-            <button onclick="closePopup()" class="blur-neon-btn-pink px-6 py-2 rounded-xl text-sm font-medium w-full tracking-widest uppercase">
-                CLOSE
+            <h3 class="text-xl md:text-2xl font-bold text-pink-500 blur-neon-text-pink mb-3 tracking-widest">ERROR</h3>
+            <p id="errorMsg" class="text-gray-300 text-sm mb-6 tracking-wide leading-relaxed">Authentication process failed.</p>
+            <button onclick="closeErrorPopup()" class="blur-neon-btn-pink px-6 py-2 rounded-xl text-sm font-medium w-full tracking-widest uppercase">
+                TRY AGAIN
             </button>
         </div>
     </div>
 
-    <footer class="border-t border-purple-950/20 py-4 text-center text-[10px] tracking-widest text-gray-600">
-        <div class="max-w-6xl mx-auto px-6">
-            &copy; 2026 NINJAROBUX. ALL RIGHTS RESERVED.
-        </div>
-    </footer>
-
     <script>
-        function checkSession() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            const discordUser = localStorage.getItem('discordUser');
-            if (isLoggedIn === 'true' && discordUser) {
-                const user = JSON.parse(discordUser);
-                document.getElementById('userTag').innerText = user.username;
-                if (user.avatar) {
-                    document.getElementById('userAvatar').src = 'https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.png';
-                } else {
-                    document.getElementById('userAvatar').src = 'https://cdn.discordapp.com/embed/avatars/0.png';
-                }
-                document.getElementById('userProfile').classList.remove('hidden');
+        const clientId = '1515398637147000903';
+        const redirectUri = window.location.origin + window.location.pathname;
+
+        document.getElementById('discordLoginBtn').addEventListener('click', function() {
+            const discordAuthUrl = 'https://discord.com/api/oauth2/authorize?client_id=' + clientId + '&redirect_uri=' + encodeURIComponent(redirectUri) + '&response_type=token&scope=identify';
+            window.location.href = discordAuthUrl;
+        });
+
+        function handleOAuthResponse() {
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            const accessToken = fragment.get('access_token');
+            
+            if (accessToken) {
+                window.location.hash = '';
+                fetch('https://discord.com/api/users/@me', {
+                    headers: {
+                        Authorization: 'Bearer ' + accessToken
+                    }
+                })
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch profile');
+                    }
+                    return response.json();
+                })
+                .then(function(data) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('discordUser', JSON.stringify(data));
+                    window.location.href = '/admin/';
+                })
+                .catch(function(err) {
+                    showErrorPopup('AUTHENTICATION ERROR: UNABLE TO RETRIEVE DISCORD PROFILE');
+                });
             }
         }
-        function showPopup() {
-            document.getElementById('welcomePopup').style.display = 'flex';
+
+        function showErrorPopup(text) {
+            document.getElementById('errorMsg').innerText = text;
+            document.getElementById('errorPopup').style.display = 'flex';
         }
-        function closePopup() {
-            document.getElementById('welcomePopup').style.display = 'none';
+        
+        function closeErrorPopup() {
+            document.getElementById('errorPopup').style.display = 'none';
         }
-        window.onload = checkSession;
+
+        window.onload = handleOAuthResponse;
     </script>
 </body>
 </html>
