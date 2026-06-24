@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zelriczyrk - Home</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            background-color: #030308;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: radial-gradient(circle at 50% 50%, #150b24 0%, #030308 100%);
+        }
+        .blur-neon-text-cyan {
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.6), 0 0 20px rgba(0, 255, 255, 0.4);
+        }
+        .blur-neon-text-pink {
+            text-shadow: 0 0 10px rgba(255, 0, 127, 0.6), 0 0 20px rgba(255, 0, 127, 0.4);
+        }
+        .blur-neon-btn-cyan {
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.03);
+            text-shadow: 0 0 4px rgba(0, 255, 255, 0.5);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.15), inset 0 0 10px rgba(0, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .blur-neon-btn-cyan:hover {
+            background: #00ffff;
+            color: #030308;
+            box-shadow: 0 0 25px #00ffff, 0 0 50px rgba(0, 255, 255, 0.6);
+            text-shadow: none;
+        }
+        .blur-neon-btn-pink {
+            border: 2px solid #ff007f;
+            color: #ff007f;
+            background: rgba(255, 0, 127, 0.03);
+            text-shadow: 0 0 4px rgba(255, 0, 127, 0.5);
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.15), inset 0 0 10px rgba(255, 0, 127, 0.1);
+            backdrop-filter: blur(8px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .blur-neon-btn-pink:hover {
+            background: #ff007f;
+            color: #030308;
+            box-shadow: 0 0 25px #ff007f, 0 0 50px rgba(255, 0, 127, 0.6);
+            text-shadow: none;
+        }
+        .blur-neon-popup {
+            background: rgba(6, 4, 12, 0.75);
+            border: 2px solid #ff007f;
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.4), inset 0 0 20px rgba(255, 0, 127, 0.2);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <header class="border-b border-purple-950/30 p-5 flex justify-between items-center container mx-auto">
+        <h1 class="text-2xl font-bold tracking-widest text-cyan-400 blur-neon-text-cyan">ZELRICZYRK</h1>
+        <nav class="space-x-6 flex items-center">
+            <div id="userProfile" class="hidden flex items-center gap-3 bg-slate-950/40 border border-purple-500/30 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <img id="userAvatar" src="" alt="Avatar" class="w-7 h-7 rounded-full border border-cyan-400">
+                <span id="userTag" class="text-sm font-medium text-cyan-400"></span>
+            </div>
+            <a href="/login/" id="navLoginBtn" class="blur-neon-btn-cyan px-5 py-2 rounded-xl font-medium tracking-wide">Login</a>
+            <a href="/giveawayclaim/" class="blur-neon-btn-pink px-5 py-2 rounded-xl font-medium tracking-wide">Giveaway</a>
+        </nav>
+    </header>
+
+    <main class="container mx-auto text-center px-5 py-20 flex-grow flex flex-col justify-center items-center">
+        <h2 class="text-5xl font-extrabold mb-6 text-pink-500 blur-neon-text-pink tracking-widest">
+            WELCOME TO ZELRICZYRK
+        </h2>
+        <p class="text-gray-400 max-w-md mx-auto mb-10 text-lg tracking-wider">
+            Experience the futuristic neon atmosphere. Join our system and explore premium exclusive features.
+        </p>
+        <div class="flex gap-6">
+            <button onclick="showPopup()" class="blur-neon-btn-pink px-8 py-3 rounded-xl font-semibold tracking-widest">
+                EXPLORE NOW
+            </button>
+            <a href="/login/" id="mainDashboardBtn" class="blur-neon-btn-cyan px-8 py-3 rounded-xl font-semibold tracking-widest">
+                ENTER DASHBOARD
+            </a>
+        </div>
+    </main>
+
+    <div id="welcomePopup" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="blur-neon-popup p-8 rounded-3xl max-w-sm w-full text-center">
+            <h3 class="text-2xl font-bold text-pink-500 blur-neon-text-pink mb-4 tracking-widest">NOTIFICATION</h3>
+            <p class="text-gray-300 mb-6 tracking-wide">Welcome to the futuristic network. Access granted successfully.</p>
+            <button onclick="closePopup()" class="blur-neon-btn-pink px-6 py-2.5 rounded-xl font-medium w-full tracking-widest">
+                CLOSE
+            </button>
+        </div>
+    </div>
+
+    <footer class="border-t border-purple-950/30 p-5 text-center text-xs tracking-widest text-gray-600">
+        &copy; 2026 ZELRICZYRK. ALL RIGHTS RESERVED.
+    </footer>
+
+    <script>
+        function checkSession() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const discordUser = localStorage.getItem('discordUser');
+            if (isLoggedIn === 'true' && discordUser) {
+                const user = JSON.parse(discordUser);
+                document.getElementById('userTag').innerText = user.username;
+                if (user.avatar) {
+                    document.getElementById('userAvatar').src = 'https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.png';
+                } else {
+                    document.getElementById('userAvatar').src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+                }
+                document.getElementById('userProfile').classList.remove('hidden');
+                document.getElementById('navLoginBtn').innerText = 'Go to Admin';
+                document.getElementById('navLoginBtn').href = '/admin/';
+                document.getElementById('mainDashboardBtn').innerText = 'GO TO ADMIN';
+                document.getElementById('mainDashboardBtn').href = '/admin/';
+            }
+        }
+        function showPopup() {
+            document.getElementById('welcomePopup').style.display = 'flex';
+        }
+        function closePopup() {
+            document.getElementById('welcomePopup').style.display = 'none';
+        }
+        window.onload = checkSession;
+    </script>
+</body>
+</html>
