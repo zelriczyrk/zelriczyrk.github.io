@@ -66,7 +66,8 @@
                     <img id="userAvatar" src="" alt="Avatar" class="w-6 h-6 rounded-full border border-cyan-400">
                     <span id="userTag" class="text-xs md:text-sm font-bold text-cyan-400 blur-neon-text-cyan"></span>
                 </div>
-                <a href="/login/" class="blur-neon-btn-cyan px-5 py-2 rounded-xl text-xs md:text-sm font-bold tracking-widest uppercase">Login</a>
+                <a href="/login/" id="loginNavBtn" class="blur-neon-btn-cyan px-5 py-2 rounded-xl text-xs md:text-sm font-bold tracking-widest uppercase">Login</a>
+                <button id="logoutNavBtn" onclick="handleLogout()" class="hidden blur-neon-btn-pink px-5 py-2 rounded-xl text-xs md:text-sm font-bold tracking-widest uppercase cursor-pointer">Logout</button>
                 <a href="/giveawayclaim/" class="blur-neon-btn-pink px-5 py-2 rounded-xl text-xs md:text-sm font-bold tracking-widest uppercase">Giveaway</a>
             </nav>
         </div>
@@ -117,6 +118,8 @@
                     document.getElementById('userAvatar').src = 'https://cdn.discordapp.com/embed/avatars/0.png';
                 }
                 document.getElementById('userProfile').classList.remove('hidden');
+                document.getElementById('loginNavBtn').classList.add('hidden');
+                document.getElementById('logoutNavBtn').classList.remove('hidden');
             }
         }
         function showPopup() {
@@ -124,6 +127,11 @@
         }
         function closePopup() {
             document.getElementById('welcomePopup').style.display = 'none';
+        }
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('discordUser');
+            window.location.reload();
         }
         window.onload = checkSession;
     </script>
