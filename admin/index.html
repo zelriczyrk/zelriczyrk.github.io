@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        body {font-family:Inter,sans-serif;background:#0f172a;color:white;padding:20px;}
+        .otp-box {max-width:420px;margin:100px auto;background:#1e2937;padding:40px;border-radius:20px;text-align:center;}
+        input {width:100%;padding:16px;font-size:1.5rem;text-align:center;letter-spacing:10px;background:#0f172a;border:2px solid #475569;color:white;border-radius:12px;}
+        button {margin-top:20px;padding:14px 50px;background:#eab308;color:black;border:none;border-radius:9999px;font-size:1.1rem;cursor:pointer;}
+        .blank {position:fixed;inset:0;background:#fff;z-index:99999;display:none;}
+    </style>
+</head>
+<body>
+    <div class="otp-box" id="otpScreen">
+        <h2>Admin Verification</h2>
+        <p>OTP is being sent to your Gmail...</p>
+        <input type="text" id="otpInput" maxlength="6" placeholder="000000">
+        <button onclick="verifyOTP()">VERIFY OTP</button>
+    </div>
+    <div class="blank" id="blankScreen"></div>
+    <div id="mainAdmin" style="display:none;">
+        <h1>Admin Panel - Claim Review</h1>
+        <div id="adminList"></div>
+    </div>
+    <script>
+        const ADMIN_EMAIL = "zelriczyrk@gmail.com";
+        let currentOTP = "";
+        emailjs.init("4jPzaCLihMU6N-bM8");
+        function generateOTP() {
+            currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            console.log("OTP (debug):", currentOTP);
+            emailjs.send("service_642wven", "template_9bkidh5", {
+                to_email: ADMIN_EMAIL,
+                otp: currentOTP,
+                time: new Date().toLocaleString('vi-VN')
+            }).then(() => console.log("Sent code to Gmail"));
+        }
+        window.verifyOTP = function() {
+            if (document.getElementById('otpInput').value.trim() === currentOTP) {
+                document.getElementById('otpScreen').style.display = 'none';
+                document.getElementById('mainAdmin').style.display = 'block';
+                renderAdmin();
+            } else {
+                document.getElementById('blankScreen').style.display = 'block';
+                setTimeout(() => location.reload(), 800);
+            }
+        };
+        let claims = JSON.parse(localStorage.getItem('giveawayClaims')) || [];
+        function renderAdmin() {
+            const list = document.getElementById('adminList');
+            list.innerHTML = claims.map((c,i) => `
+                <div style="background:#1e2937;padding:15px;margin:15px 0;border-radius:12px;border-left:5px solid #eab308;">
+                    <strong>${c.claimCode}</strong> - ${c.timestamp}<br>
+                    Discord: ${c.discord} | Roblox: ${c.roblox} | IP: ${c.ip}<br>
+                    <button onclick="updateStatus(${i}, 'Approved')" style="background:#22c55e;margin:5px;">Approve</button>
+                    <button onclick="rejectWithReason(${i})" style="background:#ef4444;margin:5px;">Reject</button>
+                </div>
+            `).join('');
+        }
+        window.updateStatus = function(i, status) {
+            claims[i].status = status;
+            localStorage.setItem('giveawayClaims', JSON.stringify(claims));
+            renderAdmin();
+        };
+        window.rejectWithReason = function(i) {
+            const reason = prompt("Reject reason:");
+            if (reason) {
+                claims[i].status = 'Rejected - ' + reason;
+                localStorage.setItem('giveawayClaims', JSON.stringify(claims));
+                renderAdmin();
+            }
+        };
+        generateOTP();
+    </script>
+</body>
+</html>
