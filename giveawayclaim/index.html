@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giveaway Claim - Zelriczyrk</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: radial-gradient(circle at center, #0a0022, #000000);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 24px;
+            padding: 60px 90px;
+            box-shadow: 0 0 80px rgba(138, 43, 226, 0.7),
+                        inset 0 0 50px rgba(255,255,255,0.15);
+            text-align: center;
+            animation: float 7s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 52px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px #ff00ff;
+        }
+
+        button {
+            margin-top: 35px;
+            padding: 20px 70px;
+            font-size: 26px;
+            font-weight: bold;
+            background: linear-gradient(#ffd700, #ffaa00);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 0 50px #ffd700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.15) translateY(-8px);
+            box-shadow: 0 0 80px #ffd700;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="glass">
+        <h1>🎉 GIVEAWAY CLAIM</h1>
+        <div id="loginArea">
+            <button onclick="startLogin()">LOGIN WITH DISCORD TO CLAIM</button>
+        </div>
+        <div id="claimArea" style="display:none;">
+            <h2>Welcome, <span id="username"></span>!</h2>
+            <button onclick="submitClaim()">🚀 CLAIM YOUR REWARD NOW</button>
+        </div>
+    </div>
+
+    <script>
+        const CLIENT_ID = "1515398637147000903"; 
+        const REDIRECT_URI = "https://zelriczyrk.github.io/giveawayclaim";
+
+        function startLogin() {
+            const url = `https://discord.com/api/oauth2/authorize?client_id=\( {CLIENT_ID}&redirect_uri= \){encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
+            window.location.href = url;
+        }
+
+        window.onload = function() {
+            const hash = window.location.hash.substring(1);
+            const params = new URLSearchParams(hash);
+            const token = params.get('access_token');
+
+            if (token) {
+                fetch('https://discord.com/api/users/@me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                .then(r => r.json())
+                .then(user => {
+                    document.getElementById('username').textContent = user.username;
+                    document.getElementById('loginArea').style.display = 'none';
+                    document.getElementById('claimArea').style.display = 'block';
+                });
+            }
+        };
+
+        async function submitClaim() {
+            const ip = await fetch('https://api.ipify.org?format=json').then(r => r.json());
+            console.log(`[GIVEAWAY CLAIM] User: ${document.getElementById('username').textContent} | IP: ${ip.ip}`);
+            alert("✅ Successfully claimed! Waiting for admin approval.");
+        }
+    </script>
+</body>
+</html> 
