@@ -3,370 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giveaway Claim • zelriczyrk.github.io</title>
+    <title>Giveaway Claim</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            position: relative;
-            color: white;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat;
-            filter: blur(10px) brightness(0.55);
-            z-index: -2;
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 460px;
-            padding: 2rem 1.5rem;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            padding: 2.6rem 2.2rem;
-            box-shadow: 0 30px 60px -15px rgb(0 0 0 / 0.6);
-            text-align: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .liquid-glow {
-            position: absolute;
-            inset: -60%;
-            background: radial-gradient(circle at 40% 30%, rgba(103, 232, 249, 0.45), transparent 60%);
-            animation: liquidFlow 18s linear infinite;
-            z-index: -1;
-            opacity: 0.7;
-        }
-
-        @keyframes liquidFlow {
-            0% { transform: rotate(0deg) translate(20px, 15px); }
-            50% { transform: rotate(180deg) translate(-25px, -30px); }
-            100% { transform: rotate(360deg) translate(20px, 15px); }
-        }
-
-        h1 {
-            font-size: 2.6rem;
-            margin-bottom: 0.3rem;
-            background: linear-gradient(90deg, #67e8f9, #a5f3fc, #c4b5fd);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.85;
-            margin-bottom: 1.4rem;
-        }
-
-        .prize-box {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(103, 232, 249, 0.3);
-            border-radius: 18px;
-            padding: 1.1rem;
-            margin: 1.6rem 0;
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .input-group {
-            margin: 1.4rem 0;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 7px;
-            font-size: 0.92rem;
-            opacity: 0.85;
-        }
-
-        input {
-            width: 100%;
-            padding: 15px 18px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.22);
-            border-radius: 16px;
-            color: white;
-            font-size: 1.02rem;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #67e8f9;
-            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.2);
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin: 1.3rem 0;
-            text-align: left;
-            font-size: 0.92rem;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin-top: 2px;
-            accent-color: #67e8f9;
-        }
-
-        .checkbox-group a {
-            color: #67e8f9;
-            text-decoration: underline;
-        }
-
-        .claim-btn {
-            width: 100%;
-            padding: 17px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            background: rgba(255,255,255,0.10);
-            backdrop-filter: blur(18px);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.22);
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-top: 0.4rem;
-        }
-
-        .claim-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -75%;
-            width: 50%;
-            height: 200%;
-            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.7), transparent);
-            transform: skewX(-25deg);
-            animation: shimmer 4s infinite linear;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-150%) skewX(-25deg); }
-            100% { transform: translateX(400%) skewX(-25deg); }
-        }
-
-        .claim-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 45px rgba(103, 232, 249, 0.6);
-        }
-
-        .claim-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .footer {
-            margin-top: 1.8rem;
-            font-size: 0.82rem;
-            opacity: 0.55;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.75);
-            backdrop-filter: blur(8px);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.25);
-            border-radius: 24px;
-            padding: 2.5rem 2rem;
-            max-width: 420px;
-            width: 92%;
-            text-align: center;
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.6);
-        }
-
-        .modal h2 {
-            font-size: 1.6rem;
-            margin-bottom: 1rem;
-            color: #67e8f9;
-        }
-
-        .modal p {
-            font-size: 1.05rem;
-            line-height: 1.6;
-            opacity: 0.9;
-        }
-
-        .modal .close-btn {
-            margin-top: 1.8rem;
-            padding: 12px 32px;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            border-radius: 9999px;
-            cursor: pointer;
-            font-weight: 600;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',sans-serif; min-height:100vh; background:linear-gradient(135deg,#0a0a0a,#1a1a2e,#16213e); color:white; position:relative; }
+        body::before { content:''; position:absolute; inset:0; background:url('https://picsum.photos/id/1015/1920/1080') center/cover; filter:blur(10px) brightness(0.55); z-index:-2; }
+        .container { max-width:480px; margin:2rem auto; padding:0 1rem; }
+        .glass-card { background:rgba(255,255,255,0.10); backdrop-filter:blur(24px); border-radius:28px; border:1px solid rgba(255,255,255,0.22); padding:2.5rem 2rem; box-shadow:0 30px 60px -15px rgba(0,0,0,0.6); position:relative; }
+        .liquid-glow { position:absolute; inset:-60%; background:radial-gradient(circle at 40% 30%, rgba(103,232,249,0.45), transparent 60%); animation:liquidFlow 18s linear infinite; z-index:-1; opacity:0.7; }
+        @keyframes liquidFlow { 0%{transform:rotate(0deg) translate(20px,15px)} 50%{transform:rotate(180deg) translate(-25px,-30px)} 100%{transform:rotate(360deg) translate(20px,15px)} }
+        h1 { font-size:2.6rem; background:linear-gradient(90deg,#67e8f9,#a5f3fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .claim-btn { width:100%; padding:17px; font-size:1.3rem; font-weight:700; text-transform:uppercase; background:rgba(255,255,255,0.10); backdrop-filter:blur(18px); border:2px solid rgba(255,255,255,0.22); border-radius:9999px; cursor:pointer; margin-top:1rem; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="glass-card">
             <div class="liquid-glow"></div>
-            
             <h1>GIVEAWAY CLAIM</h1>
-            <p class="subtitle">zelriczyrk.github.io/giveawayclaim</p>
-            
-            <div class="prize-box">
-                Claim Giveaway
+            <p style="opacity:0.8;margin:0.4rem 0 1.6rem;">zelriczyrk.github.io/giveawayclaim</p>
+            <div style="margin:1.3rem 0;text-align:left;">
+                <label>Discord Username</label>
+                <input type="text" id="discord" placeholder="username#0000" style="width:100%;padding:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.22);border-radius:16px;color:white;">
             </div>
-
-            <!-- Discord Username -->
-            <div class="input-group">
-                <label for="discord">Discord Username</label>
-                <input type="text" id="discord" placeholder="username#0000 or @username" required>
+            <div style="margin:1.3rem 0;text-align:left;">
+                <label>Roblox Username</label>
+                <input type="text" id="roblox" placeholder="Your Roblox username" style="width:100%;padding:15px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.22);border-radius:16px;color:white;">
             </div>
-
-            <!-- Roblox Username -->
-            <div class="input-group">
-                <label for="roblox">Roblox Username (for Robux reward)</label>
-                <input type="text" id="roblox" placeholder="Your Roblox username" required>
+            <div style="display:flex;align-items:start;gap:10px;margin:1.4rem 0;font-size:0.9rem;">
+                <input type="checkbox" id="tos">
+                <label for="tos">I agree to TOS & Privacy Policy</label>
             </div>
-
-            <!-- TOS Checkbox -->
-            <div class="checkbox-group">
-                <input type="checkbox" id="tos" required>
-                <label for="tos" style="margin:0; font-size:0.92rem;">
-                    I have read and agree to the 
-                    <a href="https://en.help.roblox.com/hc/en-us/articles/115004647846-Roblox-Terms-of-Use" target="_blank">Terms of Service</a> 
-                    and 
-                    <a href="https://en.help.roblox.com/hc/en-us/articles/115004630523-Roblox-Privacy-Policy" target="_blank">Privacy Policy</a>
-                </label>
-            </div>
-
-            <button class="claim-btn" onclick="claimReward()" id="claimBtn">
-                CLAIM REWARD NOW
-            </button>
-            
-            <div class="footer">
-                Verified • Anti-Cheat Protected
-            </div>
+            <button class="claim-btn" onclick="submitClaim()">CLAIM REWARD</button>
+        </div>
+        <div style="text-align:center;margin-top:2rem;">
+            <a href="/admin" style="color:#67e8f9;">Admin Panel →</a>
         </div>
     </div>
-
-    <!-- Success Modal -->
-    <div class="modal" id="successModal">
-        <div class="modal-content">
-            <h2>✅ Claim Successful!</h2>
-            <p>Your reward has been processed.<br>
-            Please wait <strong>1–12 days</strong> for the Robux to arrive in your Roblox account.</p>
-            <p style="margin-top:1rem; font-size:0.95rem; opacity:0.8;">
-                Thank you for participating!
-            </p>
-            <button class="close-btn" onclick="closeModal()">CLOSE</button>
-        </div>
-    </div>
-
     <script>
-        function claimReward() {
+        let claims = JSON.parse(localStorage.getItem('giveawayClaims')) || [];
+        async function submitClaim() {
             const discord = document.getElementById('discord').value.trim();
             const roblox = document.getElementById('roblox').value.trim();
-            const tosChecked = document.getElementById('tos').checked;
-            const btn = document.getElementById('claimBtn');
-
-            if (!discord || !roblox) {
-                alert("Please fill in both Discord and Roblox usernames.");
-                return;
-            }
-
-            if (!tosChecked) {
-                alert("You must agree to the Terms of Service and Privacy Policy.");
-                return;
-            }
-
-            btn.textContent = 'PROCESSING...';
-            btn.disabled = true;
-
-            // Simulate processing
-            setTimeout(() => {
-                btn.style.display = 'none';
-                
-                // Show modal
-                document.getElementById('successModal').style.display = 'flex';
-                
-                // Optional: show reward received box
-                showRewardBox(discord, roblox);
-            }, 1400);
+            if (!discord || !roblox) return alert("Please fill all fields");
+            const ip = await fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>d.ip).catch(()=> 'Unknown');
+            const claimCode = 'CL-' + Math.random().toString(36).substr(2,9).toUpperCase();
+            claims.unshift({timestamp:new Date().toLocaleString(), discord, roblox, ip, claimCode, status:'Pending'});
+            localStorage.setItem('giveawayClaims', JSON.stringify(claims));
+            alert("Claim submitted! Check admin for review.");
         }
-
-        function showRewardBox(discord, roblox) {
-            const card = document.querySelector('.glass-card');
-            
-            const rewardBox = document.createElement('div');
-            rewardBox.style.cssText = 'margin-top:1.8rem; padding:1.1rem; background:rgba(255,255,255,0.08); border:1px solid rgba(103,232,249,0.3); border-radius:16px; text-align:left;';
-            rewardBox.innerHTML = `
-                <div style="font-weight:600; margin-bottom:8px; color:#67e8f9;">🎁 Reward Received</div>
-                <div style="font-size:0.95rem; line-height:1.5;">
-                    <strong>Discord:</strong> ${discord}<br>
-                    <strong>Roblox:</strong> ${roblox}<br>
-                    <strong>Status:</strong> <span style="color:#4ade80;">Processing (1-12 days)</span>
-                </div>
-            `;
-            card.appendChild(rewardBox);
-        }
-
-        function closeModal() {
-            document.getElementById('successModal').style.display = 'none';
-        }
-
-        // Allow Enter key to submit
-        document.getElementById('discord').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') document.getElementById('claimBtn').click();
-        });
-        document.getElementById('roblox').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') document.getElementById('claimBtn').click();
-        });
     </script>
 </body>
 </html> 
-// hi
