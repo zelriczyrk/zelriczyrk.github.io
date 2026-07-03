@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,59 +20,73 @@
         }
 
         .glass {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(22px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 24px;
-            padding: 60px 90px;
-            box-shadow: 0 0 80px rgba(138, 43, 226, 0.7),
-                        inset 0 0 50px rgba(255,255,255,0.15);
+            padding: 50px 80px;
+            box-shadow: 0 0 70px rgba(138, 43, 226, 0.6);
             text-align: center;
-            animation: float 7s ease-in-out infinite;
+            animation: float 6s ease-in-out infinite;
         }
 
         h1 {
-            font-size: 52px;
-            background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00);
+            font-size: 46px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 40px #ff00ff;
         }
 
         button {
-            margin-top: 35px;
-            padding: 20px 70px;
-            font-size: 26px;
+            margin-top: 30px;
+            padding: 18px 65px;
+            font-size: 24px;
             font-weight: bold;
-            background: linear-gradient(#ffd700, #ffaa00);
+            background: rgba(255, 215, 0, 0.75);
             color: #000;
             border: none;
             border-radius: 50px;
-            box-shadow: 0 0 50px #ffd700;
             cursor: pointer;
-            transition: all 0.3s;
+            box-shadow: 0 0 40px #ffd700;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
         }
 
         button:hover {
-            transform: scale(1.15) translateY(-8px);
-            box-shadow: 0 0 80px #ffd700;
+            transform: scale(1.08);
+            box-shadow: 0 0 60px #ffd700;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-25px); }
+        .footer-links {
+            margin-top: 40px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .footer-links a {
+            color: #0ff;
+            text-decoration: none;
+            margin: 0 12px;
         }
     </style>
 </head>
 <body>
     <div class="glass">
         <h1>🎉 GIVEAWAY CLAIM</h1>
+        
         <div id="loginArea">
-            <button onclick="startLogin()">LOGIN WITH DISCORD TO CLAIM</button>
+            <button onclick="startLogin()">LOGIN WITH DISCORD</button>
         </div>
+
         <div id="claimArea" style="display:none;">
             <h2>Welcome, <span id="username"></span>!</h2>
-            <button onclick="submitClaim()">🚀 CLAIM YOUR REWARD NOW</button>
+            <button onclick="submitClaim()">🚀 CLAIM YOUR REWARD</button>
+        </div>
+
+        <div class="footer-links">
+            <a href="../tos">Terms of Service</a> |
+            <a href="../privacy">Privacy Policy</a>
         </div>
     </div>
 
@@ -92,7 +106,7 @@
 
             if (token) {
                 fetch('https://discord.com/api/users/@me', {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: { Authorization: `Bearer ${token}` }
                 })
                 .then(r => r.json())
                 .then(user => {
@@ -104,10 +118,10 @@
         };
 
         async function submitClaim() {
-            const ip = await fetch('https://api.ipify.org?format=json').then(r => r.json());
-            console.log(`[GIVEAWAY CLAIM] User: ${document.getElementById('username').textContent} | IP: ${ip.ip}`);
-            alert("✅ Successfully claimed! Waiting for admin approval.");
+            const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json());
+            console.log(`[CLAIM] User: ${document.getElementById('username').textContent} | IP: ${ipData.ip}`);
+            alert("✅ Claim successful! Waiting for admin review.");
         }
     </script>
 </body>
-</html> 
+</html>
