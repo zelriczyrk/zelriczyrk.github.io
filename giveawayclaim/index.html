@@ -5,83 +5,284 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giveaway Claim - Zelriczyrk</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-        body {
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.10);
+            --glass-border: rgba(255, 255, 255, 0.22);
+        }
+
+        * {
             margin: 0;
-            height: 100vh;
-            background: radial-gradient(circle at center, #0a0022, #000000);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            position: relative;
+            color: white;
         }
-        .glass {
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 24px;
-            padding: 60px 90px;
-            box-shadow: 0 0 70px rgba(138, 43, 226, 0.6);
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat;
+            filter: blur(10px) brightness(0.55);
+            z-index: -2;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 460px;
+            padding: 2rem 1.5rem;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 28px;
+            border: 1px solid var(--glass-border);
+            padding: 2.8rem 2.2rem;
+            box-shadow: 0 30px 60px -15px rgb(0 0 0 / 0.6);
             text-align: center;
+            overflow: hidden;
+            position: relative;
         }
-        h1 { font-size: 46px; background: linear-gradient(90deg, #ff00ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        button { padding: 18px 65px; font-size: 24px; background: rgba(255,215,0,0.85); color: #000; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 0 50px #ffd700; }
-        .footer { margin-top: 40px; font-size: 14px; opacity: 0.8; }
+
+        .liquid-glow {
+            position: absolute;
+            inset: -60%;
+            background: radial-gradient(circle at 40% 30%, rgba(103, 232, 249, 0.45), transparent 60%);
+            animation: liquidFlow 18s linear infinite;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        @keyframes liquidFlow {
+            0% { transform: rotate(0deg) translate(20px, 15px); }
+            50% { transform: rotate(180deg) translate(-25px, -30px); }
+            100% { transform: rotate(360deg) translate(20px, 15px); }
+        }
+
+        h1 {
+            font-size: 2.9rem;
+            margin-bottom: 0.4rem;
+            background: linear-gradient(90deg, #67e8f9, #a5f3fc, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .prize-box {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(103, 232, 249, 0.3);
+            border-radius: 18px;
+            padding: 1.2rem;
+            margin: 1.8rem 0;
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin: 1.8rem 0;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            opacity: 0.85;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            color: white;
+            font-size: 1.05rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #67e8f9;
+            box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.2);
+        }
+
+        .warning {
+            background: rgba(249, 115, 22, 0.15);
+            border-left: 4px solid #fb923c;
+            padding: 12px 16px;
+            margin: 1.2rem 0;
+            font-size: 0.92rem;
+            text-align: left;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .claim-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            color: white;
+            border: 2px solid var(--glass-border);
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 0.5rem;
+        }
+
+        .claim-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -75%;
+            width: 50%;
+            height: 200%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.7), transparent);
+            transform: skewX(-25deg);
+            animation: shimmer 4s infinite linear;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-150%) skewX(-25deg); }
+            100% { transform: translateX(400%) skewX(-25deg); }
+        }
+
+        .claim-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 45px rgba(103, 232, 249, 0.6);
+        }
+
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: fall linear forwards;
+            z-index: 10;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(900px) rotate(800deg); }
+        }
     </style>
 </head>
 <body>
-    <div class="glass">
-        <h1>🎉 GIVEAWAY CLAIM</h1>
-        
-        <div id="loginArea">
-            <button onclick="loginWithDiscord()">🔑 LOGIN WITH DISCORD</button>
-        </div>
+    <div class="container">
+        <div class="glass-card">
+            <div class="liquid-glow"></div>
+            
+            <h1>GIVEAWAY CLAIM</h1>
+            <p class="subtitle">zelriczyrk.github.io/giveawayclaim</p>
+            
+            <div class="prize-box">
+                🎁 500,000 Robux + Exclusive Limited Item
+            </div>
 
-        <div id="claimArea" style="display:none;">
-            <h2>Welcome, <span id="username"></span>!</h2>
-            <button onclick="submitClaim()">🚀 CLAIM REWARD</button>
-        </div>
+            <div class="input-group">
+                <label for="discord">Discord Username (Required)</label>
+                <input type="text" id="discord" placeholder="username#0000 or @username" required>
+            </div>
 
-        <div class="footer">
-            <a href="../tos" style="color:#0ff;">Terms of Service</a> | 
-            <a href="../privacy" style="color:#0ff;">Privacy Policy</a>
+            <div class="warning">
+                ⚠️ Enter the exact Discord username. Any mistake = reward lost permanently.
+            </div>
+
+            <button class="claim-btn" onclick="claimReward()">
+                CLAIM REWARD NOW
+            </button>
+            
+            <div class="footer">
+                Verified • Liquid Glass UI • Anti-Cheat Protected
+            </div>
         </div>
     </div>
 
     <script>
-        const CLIENT_ID = "1520225726576463994";
-
-        function loginWithDiscord() {
-            const currentUrl = window.location.href.split('?')[0].split('#')[0];
-            const url = `https://discord.com/api/oauth2/authorize?client_id=\( {CLIENT_ID}&redirect_uri= \){encodeURIComponent(currentUrl)}&response_type=token&scope=identify`;
-            window.location.href = url;
-        }
-
-        window.onload = function() {
-            const hash = window.location.hash.substring(1);
-            const params = new URLSearchParams(hash);
-            const token = params.get('access_token');
-
-            if (token) {
-                fetch('https://discord.com/api/users/@me', {
-                    headers: { Authorization: `Bearer ${token}` }
-                })
-                .then(r => r.json())
-                .then(user => {
-                    document.getElementById('username').textContent = user.username;
-                    document.getElementById('loginArea').style.display = 'none';
-                    document.getElementById('claimArea').style.display = 'block';
-                });
+        function createConfetti() {
+            const colors = ['#67e8f9', '#a5f3fc', '#c4b5fd', '#f472b6'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = confetti.style.height = (Math.random() * 12 + 8) + 'px';
+                confetti.style.opacity = Math.random() * 0.8 + 0.5;
+                confetti.style.animationDuration = (Math.random() * 3.5 + 3.5) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 8000);
             }
-        };
-
-        async function submitClaim() {
-            const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json());
-            const user = document.getElementById('username').textContent;
-            console.log(`[GIVEAWAY CLAIM] User: ${user} | IP: ${ipData.ip}`);
-            alert("✅ Claim successful! IP logged.");
         }
+
+        function claimReward() {
+            const discordInput = document.getElementById('discord').value.trim();
+            const btn = document.querySelector('.claim-btn');
+            
+            if (!discordInput) {
+                alert("Please enter your Discord username!");
+                return;
+            }
+
+            btn.textContent = 'PROCESSING...';
+            btn.style.pointerEvents = 'none';
+
+            createConfetti();
+
+            setTimeout(() => {
+                btn.innerHTML = '✅ REWARD CLAIMED!';
+                btn.style.background = 'rgba(74, 222, 128, 0.25)';
+                btn.style.borderColor = '#4ade80';
+
+                const success = document.createElement('p');
+                success.innerHTML = `Success! Reward sent to <strong>${discordInput}</strong><br>Check your Roblox account shortly.`;
+                success.style.color = '#4ade80';
+                success.style.marginTop = '1.8rem';
+                success.style.fontWeight = '600';
+                document.querySelector('.glass-card').appendChild(success);
+            }, 1600);
+        }
+
+        // Keyboard support
+        document.getElementById('discord').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') claimReward();
+        });
     </script>
 </body>
 </html> 
