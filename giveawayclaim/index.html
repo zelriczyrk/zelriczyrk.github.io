@@ -3,14 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giveaway Claim - Zelriczyrk</title>
+    <title>Giveaway Claim • zelriczyrk.github.io</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.10);
-            --glass-border: rgba(255, 255, 255, 0.22);
-        }
 
         * {
             margin: 0;
@@ -25,7 +20,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
             color: white;
         }
@@ -51,12 +46,12 @@
         }
 
         .glass-card {
-            background: var(--glass-bg);
+            background: rgba(255, 255, 255, 0.10);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-radius: 28px;
-            border: 1px solid var(--glass-border);
-            padding: 2.8rem 2.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            padding: 2.6rem 2.2rem;
             box-shadow: 0 30px 60px -15px rgb(0 0 0 / 0.6);
             text-align: center;
             overflow: hidden;
@@ -79,8 +74,8 @@
         }
 
         h1 {
-            font-size: 2.9rem;
-            margin-bottom: 0.4rem;
+            font-size: 2.6rem;
+            margin-bottom: 0.3rem;
             background: linear-gradient(90deg, #67e8f9, #a5f3fc, #c4b5fd);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -88,41 +83,41 @@
         }
 
         .subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-bottom: 1.4rem;
         }
 
         .prize-box {
             background: rgba(255,255,255,0.08);
             border: 1px solid rgba(103, 232, 249, 0.3);
             border-radius: 18px;
-            padding: 1.2rem;
-            margin: 1.8rem 0;
-            font-size: 1.35rem;
+            padding: 1.1rem;
+            margin: 1.6rem 0;
+            font-size: 1.25rem;
             font-weight: 600;
         }
 
         .input-group {
-            margin: 1.8rem 0;
+            margin: 1.4rem 0;
             text-align: left;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
+            margin-bottom: 7px;
+            font-size: 0.92rem;
             opacity: 0.85;
         }
 
         input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 15px 18px;
             background: rgba(255,255,255,0.08);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255,255,255,0.22);
             border-radius: 16px;
             color: white;
-            font-size: 1.05rem;
+            font-size: 1.02rem;
             backdrop-filter: blur(10px);
             transition: all 0.3s;
         }
@@ -133,25 +128,36 @@
             box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.2);
         }
 
-        .warning {
-            background: rgba(249, 115, 22, 0.15);
-            border-left: 4px solid #fb923c;
-            padding: 12px 16px;
-            margin: 1.2rem 0;
-            font-size: 0.92rem;
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 1.3rem 0;
             text-align: left;
-            border-radius: 0 8px 8px 0;
+            font-size: 0.92rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #67e8f9;
+        }
+
+        .checkbox-group a {
+            color: #67e8f9;
+            text-decoration: underline;
         }
 
         .claim-btn {
             width: 100%;
-            padding: 18px;
-            font-size: 1.35rem;
+            padding: 17px;
+            font-size: 1.3rem;
             font-weight: 700;
-            background: var(--glass-bg);
+            background: rgba(255,255,255,0.10);
             backdrop-filter: blur(18px);
             color: white;
-            border: 2px solid var(--glass-border);
+            border: 2px solid rgba(255,255,255,0.22);
             border-radius: 9999px;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -159,7 +165,7 @@
             overflow: hidden;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-top: 0.5rem;
+            margin-top: 0.4rem;
         }
 
         .claim-btn::before {
@@ -184,22 +190,62 @@
             box-shadow: 0 0 45px rgba(103, 232, 249, 0.6);
         }
 
-        .footer {
-            margin-top: 2rem;
-            font-size: 0.85rem;
+        .claim-btn:disabled {
             opacity: 0.6;
+            cursor: not-allowed;
         }
 
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            animation: fall linear forwards;
-            z-index: 10;
+        .footer {
+            margin-top: 1.8rem;
+            font-size: 0.82rem;
+            opacity: 0.55;
         }
 
-        @keyframes fall {
-            to { transform: translateY(900px) rotate(800deg); }
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            max-width: 420px;
+            width: 92%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.6);
+        }
+
+        .modal h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: #67e8f9;
+        }
+
+        .modal p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .modal .close-btn {
+            margin-top: 1.8rem;
+            padding: 12px 32px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -212,77 +258,114 @@
             <p class="subtitle">zelriczyrk.github.io/giveawayclaim</p>
             
             <div class="prize-box">
-                🎁 500,000 Robux + Exclusive Limited Item
+                Claim Giveaway
             </div>
 
+            <!-- Discord Username -->
             <div class="input-group">
-                <label for="discord">Discord Username (Required)</label>
+                <label for="discord">Discord Username</label>
                 <input type="text" id="discord" placeholder="username#0000 or @username" required>
             </div>
 
-            <div class="warning">
-                ⚠️ Enter the exact Discord username. Any mistake = reward lost permanently.
+            <!-- Roblox Username -->
+            <div class="input-group">
+                <label for="roblox">Roblox Username (for Robux reward)</label>
+                <input type="text" id="roblox" placeholder="Your Roblox username" required>
             </div>
 
-            <button class="claim-btn" onclick="claimReward()">
+            <!-- TOS Checkbox -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="tos" required>
+                <label for="tos" style="margin:0; font-size:0.92rem;">
+                    I have read and agree to the 
+                    <a href="https://en.help.roblox.com/hc/en-us/articles/115004647846-Roblox-Terms-of-Use" target="_blank">Terms of Service</a> 
+                    and 
+                    <a href="https://en.help.roblox.com/hc/en-us/articles/115004630523-Roblox-Privacy-Policy" target="_blank">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button class="claim-btn" onclick="claimReward()" id="claimBtn">
                 CLAIM REWARD NOW
             </button>
             
             <div class="footer">
-                Verified • Liquid Glass UI • Anti-Cheat Protected
+                Verified • Anti-Cheat Protected
             </div>
         </div>
     </div>
 
-    <script>
-        function createConfetti() {
-            const colors = ['#67e8f9', '#a5f3fc', '#c4b5fd', '#f472b6'];
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.width = confetti.style.height = (Math.random() * 12 + 8) + 'px';
-                confetti.style.opacity = Math.random() * 0.8 + 0.5;
-                confetti.style.animationDuration = (Math.random() * 3.5 + 3.5) + 's';
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => confetti.remove(), 8000);
-            }
-        }
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <h2>✅ Claim Successful!</h2>
+            <p>Your reward has been processed.<br>
+            Please wait <strong>1–12 days</strong> for the Robux to arrive in your Roblox account.</p>
+            <p style="margin-top:1rem; font-size:0.95rem; opacity:0.8;">
+                Thank you for participating!
+            </p>
+            <button class="close-btn" onclick="closeModal()">CLOSE</button>
+        </div>
+    </div>
 
+    <script>
         function claimReward() {
-            const discordInput = document.getElementById('discord').value.trim();
-            const btn = document.querySelector('.claim-btn');
-            
-            if (!discordInput) {
-                alert("Please enter your Discord username!");
+            const discord = document.getElementById('discord').value.trim();
+            const roblox = document.getElementById('roblox').value.trim();
+            const tosChecked = document.getElementById('tos').checked;
+            const btn = document.getElementById('claimBtn');
+
+            if (!discord || !roblox) {
+                alert("Please fill in both Discord and Roblox usernames.");
+                return;
+            }
+
+            if (!tosChecked) {
+                alert("You must agree to the Terms of Service and Privacy Policy.");
                 return;
             }
 
             btn.textContent = 'PROCESSING...';
-            btn.style.pointerEvents = 'none';
+            btn.disabled = true;
 
-            createConfetti();
-
+            // Simulate processing
             setTimeout(() => {
-                btn.innerHTML = '✅ REWARD CLAIMED!';
-                btn.style.background = 'rgba(74, 222, 128, 0.25)';
-                btn.style.borderColor = '#4ade80';
-
-                const success = document.createElement('p');
-                success.innerHTML = `Success! Reward sent to <strong>${discordInput}</strong><br>Check your Roblox account shortly.`;
-                success.style.color = '#4ade80';
-                success.style.marginTop = '1.8rem';
-                success.style.fontWeight = '600';
-                document.querySelector('.glass-card').appendChild(success);
-            }, 1600);
+                btn.style.display = 'none';
+                
+                // Show modal
+                document.getElementById('successModal').style.display = 'flex';
+                
+                // Optional: show reward received box
+                showRewardBox(discord, roblox);
+            }, 1400);
         }
 
-        // Keyboard support
+        function showRewardBox(discord, roblox) {
+            const card = document.querySelector('.glass-card');
+            
+            const rewardBox = document.createElement('div');
+            rewardBox.style.cssText = 'margin-top:1.8rem; padding:1.1rem; background:rgba(255,255,255,0.08); border:1px solid rgba(103,232,249,0.3); border-radius:16px; text-align:left;';
+            rewardBox.innerHTML = `
+                <div style="font-weight:600; margin-bottom:8px; color:#67e8f9;">🎁 Reward Received</div>
+                <div style="font-size:0.95rem; line-height:1.5;">
+                    <strong>Discord:</strong> ${discord}<br>
+                    <strong>Roblox:</strong> ${roblox}<br>
+                    <strong>Status:</strong> <span style="color:#4ade80;">Processing (1-12 days)</span>
+                </div>
+            `;
+            card.appendChild(rewardBox);
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
+        // Allow Enter key to submit
         document.getElementById('discord').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') claimReward();
+            if (e.key === 'Enter') document.getElementById('claimBtn').click();
+        });
+        document.getElementById('roblox').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('claimBtn').click();
         });
     </script>
 </body>
-</html> 
+</html>
