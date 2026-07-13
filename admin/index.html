@@ -60,16 +60,17 @@
       font-weight: bold;
     }
 
-    input {
+    input, select {
       width: 100%;
       padding: 12px;
       border: 2px solid #ddd;
       border-radius: 8px;
       font-size: 16px;
       transition: border-color 0.3s;
+      background: white;
     }
 
-    input:focus {
+    input:focus, select:focus {
       outline: none;
       border-color: #667eea;
     }
@@ -353,6 +354,33 @@
 
     .btn-yes { background: #667eea; color: white; }
     .btn-no { background: #ddd; color: #333; }
+
+    .token-section {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px dashed #667eea;
+      margin-bottom: 30px;
+    }
+    .token-form {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      margin-bottom: 15px;
+    }
+    .token-form .form-group {
+      flex: 1;
+      min-width: 200px;
+      margin-bottom: 0;
+    }
+    .token-form button {
+      width: auto;
+      margin-bottom: 0;
+      padding: 12px 25px;
+    }
+    .btn-copy { background: #4CAF50; color: white; }
+    .btn-copy:hover { background: #388E3C; }
   </style>
 </head>
 <body>
@@ -422,6 +450,43 @@
         <button class="logout-btn" onclick="logout()">Logout</button>
       </div>
 
+      <div class="token-section">
+        <h2 style="font-size: 20px; color: #333; margin-bottom: 15px;">🔑 Win-Token Creator</h2>
+        <div class="token-form">
+          <div class="form-group">
+            <label for="tokenString">Custom Token Key (Leave blank to auto-generate):</label>
+            <input type="text" id="tokenString" placeholder="e.g. WINNER50K">
+          </div>
+          <div class="form-group">
+            <label for="tokenExpiry">Token Duration Limit:</label>
+            <select id="tokenExpiry">
+              <option value="1_day">1 Day (24 Hours)</option>
+              <option value="3_hours">3 Hours</option>
+            </select>
+          </div>
+          <button onclick="generateToken()">Create Token</button>
+        </div>
+
+        <div class="table-container">
+          <table style="margin-top: 10px;">
+            <thead>
+              <tr>
+                <th>Token Key</th>
+                <th>Expiration Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tokenTableBody">
+              <tr>
+                <td colspan="4" class="empty-message">No active tokens found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h2 style="font-size: 20px; color: #333; margin-bottom: 15px;">📊 Claims Statistics & Logs</h2>
       <div class="stats">
         <div class="stat-card">
           <h3>Total Claims</h3>
@@ -536,7 +601,6 @@
       try {
         showMessage(messageDiv, '⏳ Sending code via Direct API...', 'info');
 
-        // Khai báo gói dữ liệu trực tiếp bằng JSON thuần để bắn API
         const payload = {
           service_id: 'service_dbho9hd',
           template_id: 'template_otv49r2',
@@ -550,7 +614,6 @@
           }
         };
 
-        // Gửi bằng Fetch API nguyên bản của trình duyệt, không thông qua thư viện ngoài
         const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
           method: 'POST',
           headers: {
@@ -639,6 +702,7 @@
     function loadAdminDashboard() {
       displayClaims();
       updateStats();
+      renderTokens();
     }
 
     function displayClaims() {
@@ -754,7 +818,87 @@
         tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
       );
     }
+
+    function makeId(length) {
+      let result = '';
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return result;
+    }
+
+    function generateToken() {
+      let tokenKey = document.getElementById('tokenString').value.trim().toUpperCase();
+      if (!tokenKey) tokenKey = 'WIN-' + makeId(8);
+
+      const durationType = document.getElementById('tokenExpiry').value;
+      let durationMs = 24 * 60 * 60 * 1000;
+      if (durationType === '3_hours') {
+        durationMs = 3 * 60 * 60 * 1000;
+      }
+
+      const expiryTime = Date.now() + durationMs;
+      let tokens = JSON.parse(localStorage.getItem('win_tokens')) || [];
+      
+      if (tokens.some(t => t.token === tokenKey)) {
+        alert('This token key already exists!');
+        return;
+      }
+
+      tokens.push({
+        token: tokenKey,
+        expiry: expiryTime
+      });
+
+      localStorage.setItem('win_tokens', JSON.stringify(tokens));
+      document.getElementById('tokenString').value = '';
+      renderTokens();
+    }
+
+    function deleteToken(tokenKey) {
+      let tokens = JSON.parse(localStorage.getItem('win_tokens')) || [];
+      tokens = tokens.filter(t => t.token !== tokenKey);
+      localStorage.setItem('win_tokens', JSON.stringify(tokens));
+      renderTokens();
+    }
+
+    function copyClaimLink(tokenKey) {
+      const claimUrl = window.location.origin + window.location.pathname.replace('admin/index.html', 'claim/index.html') + '?token=' + encodeURIComponent(tokenKey);
+      navigator.clipboard.writeText(claimUrl).then(() => {
+        alert('Copied link with auto-filled token:\n' + claimUrl);
+      }).catch(() => {
+        alert('Failed to copy. Please manually share:\n' + claimUrl);
+      });
+    }
+
+    function renderTokens() {
+      const tbody = document.getElementById('tokenTableBody');
+      const tokens = JSON.parse(localStorage.getItem('win_tokens')) || [];
+
+      if (tokens.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="empty-message">No active tokens found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = tokens.map(t => {
+        const isExpired = Date.now() > t.expiry;
+        const statusText = isExpired ? '<span style="color:#f44336;font-weight:bold;">Expired</span>' : '<span style="color:#4CAF50;font-weight:bold;">Active</span>';
+        return `
+          <tr>
+            <td style="font-family:monospace;font-weight:bold;color:#667eea;">${t.token}</td>
+            <td>${new Date(t.expiry).toLocaleString('en-US')}</td>
+            <td>${statusText}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-small btn-copy" onclick="copyClaimLink('${t.token}')">Copy Link</button>
+                <button class="btn-small btn-reject" onclick="deleteToken('${t.token}')">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
   </script>
 </body>
 </html>
- 
