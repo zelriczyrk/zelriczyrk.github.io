@@ -550,12 +550,15 @@
       try {
         showMessage(messageDiv, '⏳ Sending code via EmailJS...', 'info');
 
+        // Gửi bao gồm cả chữ thường lẫn chữ hoa để không bao giờ bị lỗi biến cấu hình
         await emailjs.send(
           EMAIL_CONFIG.serviceID,
           EMAIL_CONFIG.templateID,
           {
             to_email: email,
+            To_Email: email,
             otp_code: currentOTP,
+            OTP_Code: currentOTP,
             message: `Your Admin Panel verification code is: ${currentOTP}`
           }
         );
