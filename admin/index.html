@@ -480,8 +480,6 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
-
   <script>
     function getAllClaims() {
       return JSON.parse(localStorage.getItem('claims')) || [];
@@ -502,19 +500,6 @@
       let claims = getAllClaims();
       claims = claims.filter(claim => claim.id !== id);
       localStorage.setItem('claims', JSON.stringify(claims));
-    }
-
-    const EMAIL_CONFIG = {
-      serviceID: 'service_dbho9hd',
-      templateID: 'template_otv49r2',
-      publicKey: '4jPzaCLihMU6N-bM8',
-      adminEmail: 'zelriczyrk@gmail.com'
-    };
-
-    try {
-      emailjs.init(EMAIL_CONFIG.publicKey);
-    } catch(e) {
-      console.log("EmailJS Initialization Error");
     }
 
     let currentOTP = '';
@@ -540,7 +525,7 @@
         return;
       }
 
-      if (email !== EMAIL_CONFIG.adminEmail) {
+      if (email !== 'zelriczyrk@gmail.com') {
         showMessage(messageDiv, '❌ Email not authorized!', 'error');
         return;
       }
@@ -549,32 +534,47 @@
       storedEmail = email;
 
       try {
-        showMessage(messageDiv, '⏳ Sending code via EmailJS...', 'info');
+        showMessage(messageDiv, '⏳ Sending code via Direct API...', 'info');
 
-        await emailjs.send(
-          EMAIL_CONFIG.serviceID,
-          EMAIL_CONFIG.templateID,
-          {
+        // Khai báo gói dữ liệu trực tiếp bằng JSON thuần để bắn API
+        const payload = {
+          service_id: 'service_dbho9hd',
+          template_id: 'template_otv49r2',
+          user_id: '4jPzaCLihMU6N-bM8',
+          template_params: {
             to_email: email,
             To_Email: email,
             otp_code: currentOTP,
             OTP_Code: currentOTP,
             message: `Your Admin Panel verification code is: ${currentOTP}`
           }
-        );
+        };
 
-        showMessage(messageDiv, '✅ Code sent to your email successfully!', 'success');
+        // Gửi bằng Fetch API nguyên bản của trình duyệt, không thông qua thư viện ngoài
+        const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
 
-        setTimeout(() => {
-          document.getElementById('step1').style.display = 'none';
-          document.getElementById('step2').style.display = 'block';
-          startCountdown();
-        }, 1500);
+        if (response.ok) {
+          showMessage(messageDiv, '✅ Code sent to your email successfully!', 'success');
+
+          setTimeout(() => {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            startCountdown();
+          }, 1500);
+        } else {
+          const errText = await response.text();
+          showMessage(messageDiv, `❌ API Server Error: ${errText}`, 'error');
+        }
 
       } catch (error) {
-        console.error('EmailJS Details:', error);
-        // Sửa dòng dưới này để đưa mã lỗi trực tiếp lên giao diện cho bạn nhìn thấy
-        showMessage(messageDiv, `❌ Error Details: ${JSON.stringify(error)}`, 'error');
+        console.error('Fetch Error:', error);
+        showMessage(messageDiv, `❌ Connection Error: ${error.message || 'Unknown network issue'}`, 'error');
       }
     }
 
