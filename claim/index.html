@@ -151,6 +151,15 @@
       box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
     }
 
+    .warning-note {
+      font-size: 11px;
+      color: #ff8a80;
+      margin-top: 6px;
+      line-height: 1.4;
+      display: block;
+      opacity: 0.9;
+    }
+
     button {
       width: 100%;
       padding: 15px;
@@ -192,11 +201,12 @@
     }
 
     .btn-claim:disabled {
-      background: #333 !important;
-      color: #777;
+      background: #222 !important;
+      color: #555;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
+      border: 1px solid rgba(255,255,255,0.05);
     }
 
     .message {
@@ -385,6 +395,11 @@
       </div>
 
       <div class="form-group">
+        <label for="winToken">🔑 Win-Token:</label>
+        <input type="text" id="winToken" placeholder="Enter your Win-Token">
+      </div>
+
+      <div class="form-group">
         <label for="robloxUser">🎮 Roblox Username:</label>
         <input type="text" id="robloxUser" placeholder="Enter Roblox username">
       </div>
@@ -392,6 +407,7 @@
       <div class="form-group">
         <label for="robuxAmount">💎 Robux Amount:</label>
         <input type="number" id="robuxAmount" placeholder="e.g. 10000" min="1">
+        <span class="warning-note">⚠️ Enter the exact amount. Incorrect entry will result in loss of Robux. Requests are strictly evaluated by our verification bot.</span>
       </div>
 
       <button id="claimBtn" class="btn-claim" onclick="submitClaim()">Claim Rewards</button>
@@ -431,11 +447,17 @@
     }
 
     window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tokenFromUrl = urlParams.get('token');
+      if (tokenFromUrl && document.getElementById('winToken')) {
+        document.getElementById('winToken').value = tokenFromUrl;
+      }
+
       const fragment = new URLSearchParams(window.location.hash.slice(1));
       const accessToken = fragment.get('access_token');
 
       if (accessToken) {
-        window.history.replaceState({}, document.title, window.location.pathname);
+        window.history.replaceState({}, document.title, window.location.pathname + (tokenFromUrl ? `?token=${tokenFromUrl}` : ''));
         fetchDiscordUserInfo(accessToken);
       }
     };
@@ -460,6 +482,12 @@
             document.getElementById('avatarImg').src = `https://cdn.discordapp.com/embed/avatars/0.png`;
           }
 
+          const urlParams = new URLSearchParams(window.location.search);
+          const tokenFromUrl = urlParams.get('token');
+          if (tokenFromUrl) {
+            document.getElementById('winToken').value = tokenFromUrl;
+          }
+
           loadUserHistory(fullDiscordTag);
         } else {
           showMsg('❌ Failed to fetch Discord user info.', 'error');
@@ -469,13 +497,28 @@
       }
     }
 
+    function validateToken(tokenValue) {
+      const tokens = JSON.parse(localStorage.getItem('win_tokens')) || [];
+      const foundToken = tokens.find(t => t.token === tokenValue);
+      if (!foundToken) return { valid: false, message: '❌ Invalid Win-Token! Access Denied.' };
+      if (Date.now() > foundToken.expiry) return { valid: false, message: '❌ This Win-Token has expired!' };
+      return { valid: true };
+    }
+
     function submitClaim() {
+      const tokenValue = document.getElementById('winToken').value.trim();
       const username = document.getElementById('robloxUser').value.trim();
       const robux = document.getElementById('robuxAmount').value.trim();
       const discordUser = document.getElementById('usernameTxt').textContent;
 
-      if (!username || !robux) {
+      if (!tokenValue || !username || !robux) {
         showMsg('❌ Please fill in all fields!', 'error');
+        return;
+      }
+
+      const tokenCheck = validateToken(tokenValue);
+      if (!tokenCheck.valid) {
+        showMsg(tokenCheck.message, 'error');
         return;
       }
 
@@ -485,6 +528,7 @@
         discordTag: discordUser,
         robloxName: username,
         robux: robux,
+        tokenUsed: tokenValue,
         timestamp: new Date().toLocaleString('en-US'),
         status: 'pending'
       };
