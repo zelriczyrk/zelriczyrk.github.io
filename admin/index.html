@@ -700,6 +700,7 @@
     let pendingAction = null;
 
     function loadAdminDashboard() {
+      syncTokenUsage();
       displayClaims();
       updateStats();
       renderTokens();
@@ -848,7 +849,8 @@
 
       tokens.push({
         token: tokenKey,
-        expiry: expiryTime
+        expiry: expiryTime,
+        used: false
       });
 
       localStorage.setItem('win_tokens', JSON.stringify(tokens));
@@ -872,9 +874,29 @@
       });
     }
 
+    function syncTokenUsage() {
+      let tokens = JSON.parse(localStorage.getItem('win_tokens')) || [];
+      const claims = getAllClaims();
+      let isChanged = false;
+
+      tokens = tokens.map(t => {
+        const checkUsed = claims.some(c => c.tokenUsed === t.token || (c.notes && c.notes.includes(t.token)));
+        if (checkUsed && !t.used) {
+          t.used = true;
+          isChanged = true;
+        }
+        return t;
+      });
+
+      if (isChanged) {
+        localStorage.setItem('win_tokens', JSON.stringify(tokens));
+      }
+    }
+
     function renderTokens() {
       const tbody = document.getElementById('tokenTableBody');
       const tokens = JSON.parse(localStorage.getItem('win_tokens')) || [];
+      const claims = getAllClaims();
 
       if (tokens.length === 0) {
         tbody.innerHTML = '<tr><td colspan="4" class="empty-message">No active tokens found.</td></tr>';
@@ -883,7 +905,17 @@
 
       tbody.innerHTML = tokens.map(t => {
         const isExpired = Date.now() > t.expiry;
-        const statusText = isExpired ? '<span style="color:#f44336;font-weight:bold;">Expired</span>' : '<span style="color:#4CAF50;font-weight:bold;">Active</span>';
+        const isUsed = t.used || claims.some(c => c.tokenUsed === t.token);
+        
+        let statusText = '';
+        if (isUsed) {
+          statusText = '<span style="color:#9E9E9E;font-weight:bold;">Used (1-Time)</span>';
+        } else if (isExpired) {
+          statusText = '<span style="color:#f44336;font-weight:bold;">Expired</span>';
+        } else {
+          statusText = '<span style="color:#4CAF50;font-weight:bold;">Active</span>';
+        }
+
         return `
           <tr>
             <td style="font-family:monospace;font-weight:bold;color:#667eea;">${t.token}</td>
@@ -891,7 +923,7 @@
             <td>${statusText}</td>
             <td>
               <div class="action-buttons">
-                <button class="btn-small btn-copy" onclick="copyClaimLink('${t.token}')">Copy Link</button>
+                <button class="btn-small btn-copy" onclick="copyClaimLink('${t.token}')" ${isUsed ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Copy Link</button>
                 <button class="btn-small btn-reject" onclick="deleteToken('${t.token}')">Delete</button>
               </div>
             </td>
