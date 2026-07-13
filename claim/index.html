@@ -1,1 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claim Robux Giveaway</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .admin-link {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    .admin-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .admin-link a:hover {
+      color: #764ba2;
+    }
+
+    .success-message {
+      display: none;
+      background: #4CAF50;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .success-message.show {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .error-message {
+      display: none;
+      background: #f44336;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .error-message.show {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎁 CLAIM ROBUX</h1>
+    <p class="subtitle">Enter your information to claim Robux giveaway</p>
+
+    <div id="successMessage" class="success-message">
+      ✅ Claim submitted successfully! Admin will review it shortly.
+    </div>
+
+    <div id="errorMessage" class="error-message">
+      ❌ Please fill in all information!
+    </div>
+
+    <form onsubmit="submitClaim(event)">
+      <div class="form-group">
+        <label for="username">👤 Roblox Username:</label>
+        <input 
+          type="text" 
+          id="username" 
+          placeholder="Enter your username"
+          required
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="robux">💰 Robux Amount:</label>
+        <input 
+          type="number" 
+          id="robux" 
+          placeholder="Example: 1000"
+          min="1"
+          max="100000"
+          required
+          autocomplete="off"
+        >
+      </div>
+
+      <button type="submit">Submit Claim</button>
+    </form>
+
+    <div class="admin-link">
+      <a href="../admin/index.html">🔐 Admin</a>
+    </div>
+  </div>
+
+  <!-- Import data storage -->
+  <script src="../js/data.js"></script>
+
+  <script>
+    function submitClaim(event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const robux = document.getElementById('robux').value.trim();
+
+      if (!username || !robux) {
+        showError();
+        return;
+      }
+
+      saveClaimData({
+        username: username,
+        robux: parseInt(robux)
+      });
+
+      showSuccess();
+
+      document.getElementById('username').value = '';
+      document.getElementById('robux').value = '';
+
+      setTimeout(() => {
+        window.location.href = '../admin/index.html';
+      }, 2000);
+    }
+
+    function showSuccess() {
+      const msg = document.getElementById('successMessage');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 5000);
+    }
+
+    function showError() {
+      const msg = document.getElementById('errorMessage');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 5000);
+    }
+  </script>
+</body>
+</html>
