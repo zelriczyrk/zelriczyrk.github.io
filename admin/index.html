@@ -1,97 +1,786 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <style>
-        body {font-family:Inter,sans-serif;background:#0f172a;color:white;padding:20px;}
-        .otp-box {max-width:420px;margin:80px auto;background:#1e2937;padding:40px;border-radius:20px;text-align:center;}
-        input {width:100%;padding:16px;font-size:1.5rem;text-align:center;letter-spacing:10px;background:#0f172a;border:2px solid #475569;color:white;border-radius:12px;}
-        button {margin-top:15px;padding:12px 40px;background:#eab308;color:black;border:none;border-radius:9999px;font-size:1.1rem;cursor:pointer;}
-        .blank {position:fixed;inset:0;background:#fff;z-index:99999;display:none;}
-        .claim {background:#1e2937;padding:15px;margin:15px 0;border-radius:12px;border-left:5px solid #eab308;}
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - OTP Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .message {
+      display: none;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .message.success {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .message.error {
+      background: #f44336;
+      color: white;
+    }
+
+    .message.info {
+      background: #2196F3;
+      color: white;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    .back-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .back-link a:hover {
+      color: #764ba2;
+    }
+
+    .timer {
+      text-align: center;
+      color: #f44336;
+      font-weight: bold;
+      margin: 15px 0;
+      font-size: 18px;
+    }
+
+    .resend-btn {
+      background: #ddd;
+      color: #333;
+    }
+
+    .resend-btn:hover {
+      background: #bbb;
+    }
+
+    .step-info {
+      background: #f0f0f0;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 20px;
+    }
+
+    .logout-btn {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+      margin: 0;
+    }
+
+    .logout-btn:hover {
+      background: #d32f2f;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      font-size: 14px;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+
+    .stat-card .number {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 20px;
+      border: 2px solid #667eea;
+      background: white;
+      color: #667eea;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      margin: 0;
+    }
+
+    .filter-btn.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .filter-btn:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th {
+      background: #667eea;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+      background: #f9f9f9;
+    }
+
+    .status {
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .status.pending {
+      background: #FFC107;
+      color: black;
+    }
+
+    .status.approved {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .status.rejected {
+      background: #f44336;
+      color: white;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-small {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+      transition: all 0.3s;
+      margin: 0;
+    }
+
+    .btn-approve {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-approve:hover {
+      background: #388E3C;
+    }
+
+    .btn-reject {
+      background: #f44336;
+      color: white;
+    }
+
+    .btn-reject:hover {
+      background: #d32f2f;
+    }
+
+    .btn-delete {
+      background: #9E9E9E;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #616161;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 300px;
+    }
+
+    .modal-content h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-yes {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-no {
+      background: #ddd;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
-    <div class="otp-box" id="otpScreen">
-        <h2>Admin Verification</h2>
-        <p>OTP is being sent to Gmail...</p>
-        <input type="text" id="otpInput" maxlength="6" placeholder="000000">
-        <button onclick="verifyOTP()">VERIFY OTP</button>
-        <button onclick="testSend()" style="background:#64748b;margin-top:10px;">TEST SEND</button>
+  <div class="container">
+    <!-- STEP 1: Request Email -->
+    <div id="step1" class="step-container">
+      <h1>🔐 Admin Panel</h1>
+      <p class="subtitle">Enter your email to receive verification code</p>
+
+      <div id="message" class="message"></div>
+
+      <div class="form-group">
+        <label for="email">📧 Admin Email:</label>
+        <input 
+          type="email" 
+          id="email" 
+          placeholder="admin@gmail.com"
+          required
+        >
+      </div>
+
+      <button onclick="sendOTP()">Send OTP Code</button>
+
+      <div class="back-link">
+        <a href="./claim/index.html">← Back to Claim</a>
+      </div>
     </div>
 
-    <div class="blank" id="blankScreen"></div>
+    <!-- STEP 2: Enter OTP -->
+    <div id="step2" class="step-container" style="display: none;">
+      <h1>✅ Verify OTP</h1>
+      <p class="subtitle">Enter the code sent to your email</p>
 
-    <div id="mainAdmin" style="display:none;">
-        <h1>Admin Panel - Claim Review</h1>
-        <div id="adminList"></div>
+      <div id="message2" class="message"></div>
+
+      <div class="step-info">
+        💬 Verification code has been sent to your email.<br>
+        <strong>Valid for: 5 minutes</strong>
+      </div>
+
+      <div class="form-group">
+        <label for="otp">🔑 OTP Code (6 digits):</label>
+        <input 
+          type="text" 
+          id="otp" 
+          placeholder="000000"
+          maxlength="6"
+          inputmode="numeric"
+          required
+        >
+      </div>
+
+      <div class="timer">
+        ⏱️ Expires in: <span id="countdown">300</span> seconds
+      </div>
+
+      <button onclick="verifyOTP()">Verify</button>
+      <button class="resend-btn" onclick="resendOTP()">Resend Code</button>
+
+      <div class="back-link">
+        <a href="javascript:location.reload()">← Back</a>
+      </div>
     </div>
 
-    <script>
-        const ADMIN_EMAIL = "zelriczyrk@gmail.com";
-        let currentOTP = "";
-        emailjs.init("4jPzaCLihMU6N-bM8");
+    <!-- STEP 3: Admin Dashboard -->
+    <div id="step3" class="step-container" style="display: none;">
+      <div class="header">
+        <h1>🔐 Admin Panel</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
 
-        function generateOTP() {
-            currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            console.log("Current OTP:", currentOTP);
-            emailjs.send("service_642wven", "template_9bkidh5", {
-                to_email: ADMIN_EMAIL,
-                otp: currentOTP,
-                time: new Date().toLocaleString('vi-VN')
-            }).then(() => console.log("✅ Sent code to Gmail")).catch(err => console.error(err));
+      <div class="stats">
+        <div class="stat-card">
+          <h3>Total Claims</h3>
+          <div class="number" id="totalClaims">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Pending</h3>
+          <div class="number" id="pendingClaims">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Approved</h3>
+          <div class="number" id="approvedClaims">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Rejected</h3>
+          <div class="number" id="rejectedClaims">0</div>
+        </div>
+      </div>
+
+      <div class="filter-buttons">
+        <button class="filter-btn active" onclick="filterClaims('all')">All</button>
+        <button class="filter-btn" onclick="filterClaims('pending')">⏳ Pending</button>
+        <button class="filter-btn" onclick="filterClaims('approved')">✅ Approved</button>
+        <button class="filter-btn" onclick="filterClaims('rejected')">❌ Rejected</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Robux</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="claimsTable">
+          <tr>
+            <td colspan="6" class="empty-message">No claims yet</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal Confirm -->
+  <div id="confirmModal" class="modal">
+    <div class="modal-content">
+      <h2 id="modalTitle">Confirm?</h2>
+      <div class="modal-buttons">
+        <button class="btn-yes" onclick="confirmAction()">Yes</button>
+        <button class="btn-no" onclick="cancelAction()">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EmailJS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
+
+  <!-- Data storage -->
+  <script src="../js/data.js"></script>
+
+  <script>
+    // EmailJS Configuration
+    const EMAIL_CONFIG = {
+      serviceID: 'service_dbho9hd',
+      templateID: 'template_otv49r2',
+      publicKey: '4jPzaCLihMU6N-bM8',
+      adminEmail: 'zelriczyrk@gmail.com'
+    };
+
+    // Initialize EmailJS
+    emailjs.init(EMAIL_CONFIG.publicKey);
+
+    let currentOTP = '';
+    let storedEmail = '';
+    let otpTimer = null;
+
+    // Send OTP
+    async function sendOTP() {
+      const email = document.getElementById('email').value.trim();
+      const messageDiv = document.getElementById('message');
+
+      if (!email) {
+        showMessage(messageDiv, '❌ Please enter your email!', 'error');
+        return;
+      }
+
+      if (email !== EMAIL_CONFIG.adminEmail) {
+        showMessage(messageDiv, '❌ Email not authorized!', 'error');
+        return;
+      }
+
+      // Generate 6-digit OTP
+      currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
+      storedEmail = email;
+
+      try {
+        showMessage(messageDiv, '⏳ Sending code...', 'info');
+
+        // Send email via EmailJS
+        await emailjs.send(
+          EMAIL_CONFIG.serviceID,
+          EMAIL_CONFIG.templateID,
+          {
+            to_email: email,
+            otp_code: currentOTP,
+            message: `Your Admin Panel verification code is: ${currentOTP}\n\nThis code is valid for 5 minutes. Do not share this code with anyone!`
+          }
+        );
+
+        showMessage(messageDiv, '✅ Code sent to your email!', 'success');
+
+        // Switch to step 2
+        setTimeout(() => {
+          document.getElementById('step1').style.display = 'none';
+          document.getElementById('step2').style.display = 'block';
+          startCountdown();
+        }, 1500);
+
+      } catch (error) {
+        console.error('❌ Email send error:', error);
+        showMessage(messageDiv, '❌ Error: ' + error.message, 'error');
+      }
+    }
+
+    // Verify OTP
+    function verifyOTP() {
+      const enteredOTP = document.getElementById('otp').value.trim();
+      const messageDiv = document.getElementById('message2');
+
+      if (!enteredOTP) {
+        showMessage(messageDiv, '❌ Please enter OTP code!', 'error');
+        return;
+      }
+
+      if (enteredOTP === currentOTP) {
+        showMessage(messageDiv, '✅ Verified! Loading Admin Panel...', 'success');
+        
+        // Save login state
+        sessionStorage.setItem('adminAuth', 'true');
+        clearInterval(otpTimer);
+
+        // Switch to step 3 (Admin Dashboard)
+        setTimeout(() => {
+          document.getElementById('step2').style.display = 'none';
+          document.getElementById('step3').style.display = 'block';
+          loadAdminDashboard();
+        }, 1500);
+      } else {
+        showMessage(messageDiv, '❌ Invalid OTP code!', 'error');
+      }
+    }
+
+    // Resend OTP
+    async function resendOTP() {
+      document.getElementById('otp').value = '';
+      await sendOTP();
+    }
+
+    // Show message
+    function showMessage(element, text, type) {
+      element.textContent = text;
+      element.className = `message ${type}`;
+    }
+
+    // Countdown timer
+    function startCountdown() {
+      let timeLeft = 300; // 5 minutes
+
+      otpTimer = setInterval(() => {
+        timeLeft--;
+        document.getElementById('countdown').textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(otpTimer);
+          document.getElementById('step2').style.display = 'none';
+          document.getElementById('step1').style.display = 'block';
+          document.getElementById('email').value = '';
+          showMessage(document.getElementById('message'), '❌ OTP code expired! Please request a new one.', 'error');
         }
+      }, 1000);
+    }
 
-        window.testSend = function() {
-            generateOTP();
-            alert("Test OTP sent! Check console + Gmail");
-        };
+    // ============ ADMIN DASHBOARD ============
 
-        window.verifyOTP = function() {
-            if (document.getElementById('otpInput').value.trim() === currentOTP) {
-                document.getElementById('otpScreen').style.display = 'none';
-                document.getElementById('mainAdmin').style.display = 'block';
-                renderAdmin();
-            } else {
-                document.getElementById('blankScreen').style.display = 'block';
-                setTimeout(() => location.reload(), 800);
-            }
-        };
+    let currentFilter = 'all';
+    let pendingAction = null;
 
-        let claims = JSON.parse(localStorage.getItem('giveawayClaims')) || [];
-        function renderAdmin() {
-            const list = document.getElementById('adminList');
-            list.innerHTML = claims.map((c,i) => `
-                <div class="claim">
-                    <strong>${c.claimCode}</strong> - ${c.timestamp}<br>
-                    Discord: ${c.discord}<br>
-                    Roblox: ${c.roblox}<br>
-                    IP: ${c.ip}<br>
-                    <button onclick="updateStatus(${i}, 'Approved')" style="background:#22c55e;margin:5px 5px 5px 0;">Approve</button>
-                    <button onclick="rejectWithReason(${i})" style="background:#ef4444;margin:5px;">Reject</button>
-                </div>
-            `).join('');
-        }
+    // Load Admin Dashboard
+    function loadAdminDashboard() {
+      displayClaims();
+      updateStats();
+    }
 
-        window.updateStatus = function(i, status) {
-            claims[i].status = status;
-            localStorage.setItem('giveawayClaims', JSON.stringify(claims));
-            renderAdmin();
-        };
+    // Display claims
+    function displayClaims() {
+      const claims = getAllClaims();
+      const tbody = document.getElementById('claimsTable');
 
-        window.rejectWithReason = function(i) {
-            const reason = prompt("Reject reason:");
-            if (reason) {
-                claims[i].status = 'Rejected - ' + reason;
-                localStorage.setItem('giveawayClaims', JSON.stringify(claims));
-                renderAdmin();
-            }
-        };
+      let filteredClaims = claims;
+      if (currentFilter !== 'all') {
+        filteredClaims = claims.filter(c => c.status === currentFilter);
+      }
 
-        generateOTP();
-    </script>
+      filteredClaims = filteredClaims.reverse();
+
+      if (filteredClaims.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-message">No claims yet</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filteredClaims.map((claim, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td><strong>${claim.username}</strong></td>
+          <td><strong>${claim.robux.toLocaleString('en-US')}</strong></td>
+          <td>${claim.timestamp}</td>
+          <td><span class="status ${claim.status}">${getStatusText(claim.status)}</span></td>
+          <td>
+            <div class="action-buttons">
+              ${claim.status === 'pending' ? `
+                <button class="btn-small btn-approve" onclick="showConfirm('approve', ${claim.id})">Approve</button>
+                <button class="btn-small btn-reject" onclick="showConfirm('reject', ${claim.id})">Reject</button>
+              ` : ''}
+              <button class="btn-small btn-delete" onclick="showConfirm('delete', ${claim.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Update stats
+    function updateStats() {
+      const claims = getAllClaims();
+      document.getElementById('totalClaims').textContent = claims.length;
+      document.getElementById('pendingClaims').textContent = claims.filter(c => c.status === 'pending').length;
+      document.getElementById('approvedClaims').textContent = claims.filter(c => c.status === 'approved').length;
+      document.getElementById('rejectedClaims').textContent = claims.filter(c => c.status === 'rejected').length;
+    }
+
+    // Filter claims
+    function filterClaims(status) {
+      currentFilter = status;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      displayClaims();
+    }
+
+    function getStatusText(status) {
+      const texts = {
+        'pending': '⏳ Pending',
+        'approved': '✅ Approved',
+        'rejected': '❌ Rejected'
+      };
+      return texts[status] || status;
+    }
+
+    function showConfirm(action, claimId) {
+      const claim = getAllClaims().find(c => c.id === claimId);
+      const modal = document.getElementById('confirmModal');
+      const title = document.getElementById('modalTitle');
+
+      const messages = {
+        'approve': `Approve ${claim.username}'s claim?`,
+        'reject': `Reject ${claim.username}'s claim?`,
+        'delete': `Delete ${claim.username}'s claim?`
+      };
+
+      title.textContent = messages[action];
+      pendingAction = { action, claimId };
+      modal.classList.add('show');
+    }
+
+    function confirmAction() {
+      const { action, claimId } = pendingAction;
+      const modal = document.getElementById('confirmModal');
+
+      if (action === 'approve') {
+        updateClaimStatus(claimId, 'approved');
+        alert('✅ Claim approved!');
+      } else if (action === 'reject') {
+        updateClaimStatus(claimId, 'rejected');
+        alert('❌ Claim rejected!');
+      } else if (action === 'delete') {
+        deleteClaim(claimId);
+        alert('🗑️ Claim deleted!');
+      }
+
+      modal.classList.remove('show');
+      displayClaims();
+      updateStats();
+    }
+
+    function cancelAction() {
+      document.getElementById('confirmModal').classList.remove('show');
+      pendingAction = null;
+    }
+
+    function logout() {
+      sessionStorage.removeItem('adminAuth');
+      location.reload();
+    }
+  </script>
 </body>
-</html> 
+</html>
