@@ -306,6 +306,7 @@
     .action-buttons {
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     .btn-small {
@@ -537,11 +538,32 @@
   <!-- EmailJS Library -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
 
-  <!-- Data storage -->
-  <script src="../js/data.js"></script>
-
   <script>
-    // EmailJS Configuration
+    // ============ STORAGE FUNCTIONS ============
+    function getAllClaims() {
+      return JSON.parse(localStorage.getItem('claims')) || [];
+    }
+
+    function updateClaimStatus(id, status) {
+      let claims = JSON.parse(localStorage.getItem('claims')) || [];
+      
+      claims = claims.map(claim => {
+        if (claim.id === id) {
+          claim.status = status;
+        }
+        return claim;
+      });
+      
+      localStorage.setItem('claims', JSON.stringify(claims));
+    }
+
+    function deleteClaim(id) {
+      let claims = JSON.parse(localStorage.getItem('claims')) || [];
+      claims = claims.filter(claim => claim.id !== id);
+      localStorage.setItem('claims', JSON.stringify(claims));
+    }
+
+    // ============ EMAILJS CONFIGURATION ============
     const EMAIL_CONFIG = {
       serviceID: 'service_dbho9hd',
       templateID: 'template_otv49r2',
