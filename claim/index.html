@@ -197,10 +197,23 @@
     </div>
   </div>
 
-  <!-- Import data storage -->
-  <script src="../js/data.js"></script>
-
   <script>
+    // Storage Functions
+    function saveClaimData(claim) {
+      let claims = JSON.parse(localStorage.getItem('claims')) || [];
+      
+      claims.push({
+        id: Date.now(),
+        username: claim.username,
+        robux: claim.robux,
+        timestamp: new Date().toLocaleString('en-US'),
+        status: 'pending'
+      });
+      
+      localStorage.setItem('claims', JSON.stringify(claims));
+    }
+
+    // Submit Claim
     function submitClaim(event) {
       event.preventDefault();
 
