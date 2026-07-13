@@ -513,7 +513,7 @@
     try {
       emailjs.init(EMAIL_CONFIG.publicKey);
     } catch(e) {
-      console.log("EmailJS Error Init");
+      console.log("EmailJS Initialization Error");
     }
 
     let currentOTP = '';
@@ -560,19 +560,18 @@
           }
         );
 
-        showMessage(messageDiv, '✅ Code sent to your email thành công!', 'success');
+        showMessage(messageDiv, '✅ Code sent to your email successfully!', 'success');
+
+        setTimeout(() => {
+          document.getElementById('step1').style.display = 'none';
+          document.getElementById('step2').style.display = 'block';
+          startCountdown();
+        }, 1500);
 
       } catch (error) {
         console.error('EmailJS Error:', error);
-        showMessage(messageDiv, '⚠️ EmailJS Error! Hiển thị mã trực tiếp để đăng nhập.', 'info');
-        alert(`[CHẾ ĐỘ DỰ PHÒNG] Mã xác minh OTP của bạn là: ${currentOTP}`);
+        showMessage(messageDiv, '❌ Failed to send email. Please check your EmailJS configuration.', 'error');
       }
-
-      setTimeout(() => {
-        document.getElementById('step1').style.display = 'none';
-        document.getElementById('step2').style.display = 'block';
-        startCountdown();
-      }, 1500);
     }
 
     function verifyOTP() {
