@@ -111,6 +111,7 @@
       text-align: center;
       font-weight: bold;
       animation: slideDown 0.3s ease-out;
+      word-break: break-all;
     }
 
     .message.success { display: block; background: #4CAF50; color: white; }
@@ -550,7 +551,6 @@
       try {
         showMessage(messageDiv, '⏳ Sending code via EmailJS...', 'info');
 
-        // Gửi bao gồm cả chữ thường lẫn chữ hoa để không bao giờ bị lỗi biến cấu hình
         await emailjs.send(
           EMAIL_CONFIG.serviceID,
           EMAIL_CONFIG.templateID,
@@ -572,8 +572,9 @@
         }, 1500);
 
       } catch (error) {
-        console.error('EmailJS Error:', error);
-        showMessage(messageDiv, '❌ Failed to send email. Please check your EmailJS configuration.', 'error');
+        console.error('EmailJS Details:', error);
+        // Sửa dòng dưới này để đưa mã lỗi trực tiếp lên giao diện cho bạn nhìn thấy
+        showMessage(messageDiv, `❌ Error Details: ${JSON.stringify(error)}`, 'error');
       }
     }
 
